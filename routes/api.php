@@ -11,10 +11,6 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-
 Route::apiResource('v1/stories', StoryController::class);
 
 Route::apiResource('v1/chapters', ChapterController::class);
