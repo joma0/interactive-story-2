@@ -1,0 +1,266 @@
+[
+    {
+        "title": "Perdu dans l’obscurité",
+        "location": "grotte",
+        "chapters": [
+            {
+                "number": 1,
+                "version": "A",
+                "text": "Vous ouvrez les yeux, mais il n’y a rien...",
+                "choices": [
+                    {
+                        "text": "Tendre les bras autour de vous",
+                        "result_chapter": { "numero": 2, "version": "A" }
+                    },
+                    {
+                        "text": "Tendre l’oreille pour écouter",
+                        "result_chapter": { "numero": 2, "version": "B" }
+                    }
+                ]
+            },
+            {
+                "number": 2,
+                "version": "A",
+                "text": "Vos bras rencontrent des parois courbes...",
+                "choices": [
+                    {
+                        "text": "Suivre le courant d’air",
+                        "result_chapter": { "numero": 3, "version": "a" }
+                    },
+                    {
+                        "text": "Ramper dans l’autre direction",
+                        "result_chapter": { "numero": 3, "version": "b" }
+                    }
+                ]
+            },
+            {
+                "number": 2,
+                "version": "B",
+                "text": "Vous percevez un son faible...",
+                "choices": [
+                    {
+                        "text": "Avancer vers le bruit",
+                        "result_chapter": { "numero": 3, "version": "a" }
+                    },
+                    {
+                        "text": "S’éloigner du bruit",
+                        "result_chapter": { "numero": 3, "version": "b" }
+                    }
+                ]
+            },
+            {
+                "number": 3,
+                "version": "a",
+                "text": "Votre progression est lente...",
+                "choices": [
+                    {
+                        "text": "Continuer à ramper dans cette direction",
+                        "result_chapter": { "numero": 5, "version": "a" }
+                    },
+                    {
+                        "text": "Changer de direction vers une ouverture latérale",
+                        "result_chapter": { "numero": 4, "version": "a" }
+                    }
+                ]
+            },
+            {
+                "number": 3,
+                "version": "b",
+                "text": "Vous glissez soudainement dans une cavité...",
+                "choices": [
+                    {
+                        "text": "Chercher un passage plus sec",
+                        "result_chapter": { "numero": 4, "version": "a" }
+                    },
+                    {
+                        "text": "Rester immobile et écouter",
+                        "result_chapter": { "numero": 4, "version": "b" }
+                    }
+                ]
+            },
+            {
+                "number": 4,
+                "version": "a",
+                "text": "Une brise douce vous guide...",
+                "choices": [
+                    {
+                        "text": "Suivre le souffle de l’air",
+                        "result_chapter": { "numero": 5, "version": "a" }
+                    },
+                    {
+                        "text": "Explorer une nouvelle fissure sur le côté",
+                        "result_chapter": { "numero": 4, "version": "b" }
+                    }
+                ]
+            },
+            {
+                "number": 4,
+                "version": "b",
+                "text": "Vous semblez tourner en rond...",
+                "choices": [
+                    {
+                        "text": "Vous êtes dans une grotte.",
+                        "result_chapter": { "numero": 5, "version": "a" }
+                    },
+                    {
+                        "text": "Vous êtes dans une citerne.",
+                        "result_chapter": { "numero": 5, "version": "b" }
+                    }
+                ]
+            },
+            {
+                "number": 4,
+                "version": "c",
+                "text": "Un mouvement mal calculé et vous glissez...",
+                "choices": [
+                    {
+                        "text": "Continuer malgré la douleur",
+                        "result_chapter": { "numero": 4, "version": "b" }
+                    },
+                    {
+                        "text": "Rester immobile en espérant de l’aide",
+                        "result_chapter": { "numero": 5, "version": "b" }
+                    }
+                ]
+            },
+            {
+                "number": 5,
+                "version": "a",
+                "text": "Une lueur. Puis une autre. Vous émergez...",
+                "choices": []
+            },
+            {
+                "number": 5,
+                "version": "b",
+                "text": "Le silence vous avale...",
+                "choices": []
+            }
+        ]
+    },
+    {
+        "title": "Errance en terre inconnue",
+        "location": "jungle",
+        "chapters": [
+            {
+                "number": 1,
+                "version": "A",
+                "text": "La végétation est dense, presque étouffante. Vous entendez des cris d’animaux lointains.",
+                "choices": [
+                    {
+                        "text": "Avancer vers la lumière entre les feuillages",
+                        "result_chapter": { "numero": 2, "version": "A" }
+                    },
+                    {
+                        "text": "Grimper à un arbre pour observer",
+                        "result_chapter": { "numero": 2, "version": "B" }
+                    }
+                ]
+            },
+            {
+                "number": 2,
+                "version": "A",
+                "text": "Vous tombez sur une rivière trouble. Un pont de lianes pend de l’autre côté.",
+                "choices": [
+                    {
+                        "text": "Traverser le pont",
+                        "result_chapter": { "numero": 3, "version": "A" }
+                    },
+                    {
+                        "text": "Chercher un passage à gué",
+                        "result_chapter": { "numero": 3, "version": "B" }
+                    }
+                ]
+            },
+            {
+                "number": 2,
+                "version": "B",
+                "text": "Depuis la cime, vous apercevez une clairière. Un feu semble y brûler.",
+                "choices": [
+                    {
+                        "text": "Se diriger vers le feu",
+                        "result_chapter": { "numero": 3, "version": "A" }
+                    },
+                    {
+                        "text": "Rester à l’abri des regards",
+                        "result_chapter": { "numero": 3, "version": "B" }
+                    }
+                ]
+            },
+            {
+                "number": 3,
+                "version": "A",
+                "text": "Vous arrivez dans un village caché. Des regards curieux vous scrutent.",
+                "choices": []
+            },
+            {
+                "number": 3,
+                "version": "B",
+                "text": "Vous tombez dans un piège. Une fosse remplie de pieux en bambou !",
+                "choices": []
+            }
+        ]
+    },
+    {
+        "title": "Etrange atmosphère",
+        "location": "espace",
+        "chapters": [
+            {
+                "number": 1,
+                "version": "A",
+                "text": "Vous ouvrez les yeux dans une capsule. Les alarmes clignotent. Plus de communication.",
+                "choices": [
+                    {
+                        "text": "Tenter une réparation du système",
+                        "result_chapter": { "numero": 2, "version": "A" }
+                    },
+                    {
+                        "text": "Chercher des signes de vie à l’extérieur",
+                        "result_chapter": { "numero": 2, "version": "B" }
+                    }
+                ]
+            },
+            {
+                "number": 2,
+                "version": "A",
+                "text": "Les circuits sont grillés. Vous bricolez un lien de fortune avec les panneaux solaires.",
+                "choices": [
+                    {
+                        "text": "Envoyer un signal de détresse",
+                        "result_chapter": { "numero": 3, "version": "A" }
+                    },
+                    {
+                        "text": "Conserver l’énergie et attendre",
+                        "result_chapter": { "numero": 3, "version": "B" }
+                    }
+                ]
+            },
+            {
+                "number": 2,
+                "version": "B",
+                "text": "Une silhouette flotte à proximité. Vivante ? Dérivante ?",
+                "choices": [
+                    {
+                        "text": "S’arrimer à elle",
+                        "result_chapter": { "numero": 3, "version": "A" }
+                    },
+                    {
+                        "text": "L’observer sans intervenir",
+                        "result_chapter": { "numero": 3, "version": "B" }
+                    }
+                ]
+            },
+            {
+                "number": 3,
+                "version": "A",
+                "text": "Un vaisseau capte votre présence. Vous êtes sauvé.",
+                "choices": []
+            },
+            {
+                "number": 3,
+                "version": "B",
+                "text": "La capsule sombre peu à peu dans l’ombre. Aucun secours en vue.",
+                "choices": []
+            }
+        ]
+    }
+]
