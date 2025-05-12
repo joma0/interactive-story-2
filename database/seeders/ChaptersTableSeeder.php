@@ -11,13 +11,15 @@ class ChaptersTableSeeder extends Seeder
     /**
      * Créer un Chapter grâce à des paramètres reçus de DatabaseSeeder
      */
-    public function run($params = [])
+    public function run() {}
+
+    public function seedFromData(array $chapterData)
     {
-        return \App\Models\Chapter::create([
-            'story_id' => $params['chapter']['story_id'],
-            'number' => $params['chapter']['number'],
-            'version' => $params['chapter']['version'],
-            'text' => $params['chapter']['text'],
+        return Chapter::create([
+            'number' => $chapterData['number'],
+            'version' => $chapterData['version'],
+            'text' => $chapterData['text'],
+            'story_id' => $chapterData['story_id'],
         ]);
     }
 }

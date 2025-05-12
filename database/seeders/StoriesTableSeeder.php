@@ -13,9 +13,10 @@ class StoriesTableSeeder extends Seeder
     /**
      * Créer une Story grâce à des paramètres reçus de DatabaseSeeder
      */
-    public function run($params = []): void
+    public function run(): void {}
+
+    public function seedFromData(array $storyData): void
     {
-        $storyData = $params['story'];
         $story = Story::create([
             'title' => $storyData['title'],
             'location' => $storyData['location']
@@ -26,27 +27,25 @@ class StoriesTableSeeder extends Seeder
         // Créer les chapitres
         foreach ($storyData['chapters'] as $chapterData) {
             $chapterData['story_id'] = $story->id;
-            $chapter = app(ChaptersTableSeeder::class)->run(['chapter' => $chapterData]);
+            $chapter = app(ChaptersTableSeeder::class)->seedFromData($chapterData);
             $key = $chapter->number . '_' . $chapter->version;
-            $chapterMap[$key] = $chapter->id;
+            $chaptersMap[$key] = $chapter->id;
         }
 
         // Créer les choix
         foreach ($storyData['chapters'] as $chapterData) {
             $originKey = $chapterData['number'] . '_' . $chapterData['version'];
-            $originId = $chapterMap[$originKey];
+            $originId = $chaptersMap[$originKey];
 
-            foreach ($chapterData['choices'] as $choiceData) {
+            foreach ($chapterData['choices'] ?? [] as $choiceData) {
                 $targetKey = $choiceData['result_chapter']['numero'] . '_' . $choiceData['result_chapter']['version'];
-                $targetId = $chapterMap[$targetKey] ?? null;
+                $targetId = $chaptersMap[$targetKey] ?? null;
 
                 if ($targetId) {
-                    app(ChoicesTableSeeder::class)->run([
-                        'choice' => [
-                            'origin_chapter_id' => $originId,
-                            'result_chapter_id' => $targetId,
-                            'text' => $choiceData['text']
-                        ]
+                    app(ChoicesTableSeeder::class)->seedFromData([
+                        'origin_chapter_id' => $originId,
+                        'result_chapter_id' => $targetId,
+                        'text' => $choiceData['text']
                     ]);
                 }
             }

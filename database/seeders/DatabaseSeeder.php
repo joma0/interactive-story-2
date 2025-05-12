@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         $stories = json_decode($json, true);
 
         foreach ($stories as $storyData) {
-            $this->call(StoriesTableSeeder::class, false, ['story' => $storyData]);
+            app(StoriesTableSeeder::class)->seedFromData($storyData);
         }
     }
 }

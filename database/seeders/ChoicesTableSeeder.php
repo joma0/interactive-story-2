@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Choice;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -10,8 +11,10 @@ class ChoicesTableSeeder extends Seeder
     /**
      * Remplir la table Choices
      */
-    public function run($params = [])
+    public function run() {}
+
+    public function seedFromData(array $choiceData)
     {
-        \App\Models\Choice::create($params['choice']);
+        return Choice::create($choiceData);
     }
 }
