@@ -32,6 +32,6 @@ class RegisterController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('page-protegee');
+        return redirect()->route('user');
     }
 }

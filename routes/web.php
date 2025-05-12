@@ -22,15 +22,11 @@ Route::post('register', [RegisterController::class, 'register']);
 // Déconnexion
 Route::post('logout', [LogoutController::class, 'logout'])->name('logout');
 
-Route::get('/profile', function () {
-    return view('profile');
-})->middleware('auth')->name('page-protegee');
-
 // Afficher le profil de l'utilisateur
-Route::get('/user', [UserController::class, 'show'])->middleware('auth');
+Route::get('user', [UserController::class, 'show'])->middleware('auth')->name('user-show');
 
 // Mettre à jour le profil de l'utilisateur
-Route::put('/user', [UserController::class, 'update'])->middleware('auth');
+Route::put('user', [UserController::class, 'update'])->middleware('auth')->name('user-update');
 
 // Supprimer le compte de l'utilisateur
-Route::delete('/user', [UserController::class, 'destroy'])->middleware('auth');
+Route::delete('user', [UserController::class, 'destroy'])->middleware('auth')->name('user-delete');

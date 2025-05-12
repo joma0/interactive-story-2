@@ -21,11 +21,11 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            // Rediriger l'utilisateur vers la page protégée après une connexion réussie
-            return redirect()->intended('profile');
+            // Redirection vers la page profil après une connexion réussie
+            return redirect()->intended('user');
         }
 
-        // Si l'authentification échoue
+        // Message après échec d'authentification
         return back()->withErrors([
             'email' => 'Les informations d\'identification sont incorrectes.',
         ])->withInput();
