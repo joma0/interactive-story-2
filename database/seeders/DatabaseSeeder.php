@@ -2,22 +2,26 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Models\Story;
+use App\Models\Chapter;
+use App\Models\Choice;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
+
 
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Remplir les tables Story, Chapter et Choice d'après les données JSON
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $json = File::get(database_path('stories.json'));
+        $stories = json_decode($json, true);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        foreach ($stories as $storyData) {
+            $this->call(StoriesTableSeeder::class, false, ['story' => $storyData]);
+        }
     }
 }
