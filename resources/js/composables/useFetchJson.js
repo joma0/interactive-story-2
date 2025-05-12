@@ -26,13 +26,12 @@ export function useFetchJson(options) {
     const immediate = fetchOptions.immediate !== false;
     let curAbort = () => {};
 
-    function execute(dataOverride = undefined) {
+    function execute(overrideOption = {}) {
         loading.value = true;
         data.value = null;
         error.value = null;
 
-        const finalOptions = { ...fetchOptions };
-        if (dataOverride !== undefined) finalOptions.data = dataOverride;
+        const finalOptions = { ...fetchOptions, ...overrideOption };
 
         const { request, abort: newAbort } = fetchJson(finalOptions);
         curAbort = newAbort;
