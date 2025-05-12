@@ -11,6 +11,8 @@ Route::get('/', function () {
     return view('index');
 });
 
+///// Authentification
+
 // Page de connexion
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
@@ -21,6 +23,8 @@ Route::post('register', [RegisterController::class, 'register']);
 
 // Déconnexion
 Route::post('logout', [LogoutController::class, 'logout'])->name('logout');
+
+///// Gestion du profil utilisateur
 
 // Afficher le profil de l'utilisateur
 Route::get('user', [UserController::class, 'show'])->middleware('auth')->name('user-show');

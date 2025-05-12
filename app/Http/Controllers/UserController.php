@@ -50,6 +50,6 @@ class UserController extends Controller
         $user = Auth::user();
         $user->delete();
 
-        return response()->json(['message' => 'Votre compte a été supprimé avec succès.']);
+        return redirect()->route('user-show')->with('success', 'Votre compte a été supprimé avec succès.');
     }
 }
