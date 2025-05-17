@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, nextTick } from "vue";
 import { useFetchJson } from "@/composables/useFetchJson";
 
 // Histoire et chapitre en cours de lecture
@@ -35,6 +35,13 @@ function readStory(story) {
     fetchChapters({ url: `stories/${story.id}/chapters` });
 }
 
+function nextChapter(nextChapterId) {
+    currentChapter.value = chapters.value.find(
+        (chapter) => chapter.id === nextChapterId
+    );
+    console.log(currentChapter);
+}
+
 // Mettre à jour currentChapter
 watch(chapters, (newData) => {
     if (newData && newData.length) {
@@ -45,7 +52,7 @@ watch(chapters, (newData) => {
 
 // Afficher les choix
 watch(currentChapter, (chapter) => {
-    if (chapter) {
+    if (chapter && chapter.number != 5) {
         fetchChoices({ url: `chapters/${chapter.id}/choices` });
     }
 });
@@ -75,11 +82,16 @@ watch(currentChapter, (chapter) => {
         <div v-if="currentChapter && !choicesLoading && choices.length">
             <h3 v-if="currentChapter">Chapitre {{ currentChapter.number }}</h3>
             <p v-if="currentChapter">{{ currentChapter.text }}</p>
-            <ul>
-                <li v-for="choice in choices" :key="choice.id">
+            <ul v-if="currentChapter.number != 5">
+                <li
+                    v-for="choice in choices"
+                    :key="choice.id"
+                    @click="nextChapter(choice.result_chapter_id)"
+                >
                     {{ choice.text }}
                 </li>
             </ul>
+            <p v-if="currentChapter.number === 5">Fin de l'histoire</p>
         </div>
     </section>
 </template>
