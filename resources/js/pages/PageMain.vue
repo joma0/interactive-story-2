@@ -2,6 +2,22 @@
 import { ref, watch, computed, nextTick } from "vue";
 import { useFetchJson } from "@/composables/useFetchJson";
 
+//Router
+const hash = ref(window.location.hash || "#all-stories");
+
+function router() {
+    hash.value = window.location.hash || "#all-stories";
+}
+
+// Ajouter un event listener au changement de hash dans l'url
+window.addEventListener("hashchange", router);
+
+// Appeler une première fois render directement au chargement de la page
+router();
+
+// Afficher les sections correspondantes
+const isCurrent = (section) => section === hash;
+
 // Histoire et chapitre en cours de lecture
 const currentStory = ref(null);
 const currentChapter = ref(null);
@@ -33,6 +49,7 @@ const {
 function readStory(story) {
     currentStory.value = story;
     fetchChapters({ url: `stories/${story.id}/chapters` });
+    window.location.hash = "#current-story";
 }
 
 function nextChapter(nextChapterId) {
@@ -59,7 +76,7 @@ watch(currentChapter, (chapter) => {
 </script>
 
 <template>
-    <section id="all-stories">
+    <section id="all-stories" v-if="hash === '#all-stories'">
         <h2>Choisissez votre histoire</h2>
         <p v-if="storiesLoading">Chargement des histoires ...</p>
         <p v-if="storiesError">Erreur : {{ storiesError.statusText }}</p>
@@ -73,7 +90,10 @@ watch(currentChapter, (chapter) => {
             </li>
         </ul>
     </section>
-    <section id="current-story">
+    <section
+        id="current-story"
+        v-if="hash === '#current-story' && currentStory"
+    >
         <h2>{{ currentStory?.title }}</h2>
         <p v-if="chaptersLoading || choicesLoading">Chargement du livre</p>
         <p v-if="chaptersError">Erreur : {{ chaptersError.statusText }}</p>
