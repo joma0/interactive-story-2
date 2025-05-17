@@ -2,6 +2,7 @@
 import { createApp } from "vue";
 import { setDefaultHeaders, setDefaultBaseUrl } from "@/utils/fetchJson.js";
 import App from "./App.vue";
+import "../css/app.css";
 
 const csrfToken =
     document
