@@ -128,7 +128,9 @@ watch(
 
 <template>
     <section id="all-stories" v-if="hash === '#all-stories'">
-        <h2>Choisissez votre histoire</h2>
+        <h2 class="text-green-600 text-2xl font-bold mb-4">
+            Choisissez votre histoire
+        </h2>
         <p v-if="storiesLoading">Chargement des histoires ...</p>
         <p v-if="storiesError">Erreur : {{ storiesError.statusText }}</p>
         <ul v-if="stories">
