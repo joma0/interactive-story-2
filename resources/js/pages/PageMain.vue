@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch, computed, nextTick } from "vue";
 import { useFetchJson } from "@/composables/useFetchJson";
+import { setItem, getItem } from "../utils/jsonStorage";
 
 //Router
 const hash = ref(window.location.hash || "#all-stories");
@@ -15,8 +16,31 @@ window.addEventListener("hashchange", router);
 // Appeler une première fois render directement au chargement de la page
 router();
 
-// Afficher les sections correspondantes
-const isCurrent = (section) => section === hash;
+// Reprendre la progression
+const savedProgress = ref(getItem("story-in-progress"));
+const showResumePrompt = ref(!!savedProgress.value);
+
+function backToInProgress() {
+    if (!savedProgress.value) return;
+
+    const { savedStory, savedChapter, savedStoryChapters, savedChoices } =
+        savedProgress.value;
+
+    currentStory.value = savedStory;
+    currentChapter.value = savedChapter;
+    chapters.value = savedStoryChapters;
+    choices.value = savedChoices;
+
+    window.location.hash = "#current-story";
+    showResumePrompt.value = false;
+}
+
+function resetProgress() {
+    localStorage.removeItem("story-in-progress");
+    savedProgress.value = null;
+    window.location.hash = "#all-stories";
+    showResumePrompt.value = false;
+}
 
 // Histoire et chapitre en cours de lecture
 const currentStory = ref(null);
@@ -48,8 +72,22 @@ const {
 // Sélectionner une histoire :
 function readStory(story) {
     currentStory.value = story;
-    fetchChapters({ url: `stories/${story.id}/chapters` });
     window.location.hash = "#current-story";
+    fetchChapters({ url: `stories/${story.id}/chapters` });
+
+    // Attribuer le premier chapitre à currentChapter
+    watch(
+        chapters,
+        (newData) => {
+            if (newData && newData.length) {
+                const firstChapter = newData.find(
+                    (chapter) => chapter.number === 1
+                );
+                if (firstChapter) currentChapter.value = firstChapter;
+            }
+        },
+        { once: true }
+    );
 }
 
 function nextChapter(nextChapterId) {
@@ -59,20 +97,33 @@ function nextChapter(nextChapterId) {
     console.log(currentChapter);
 }
 
-// Mettre à jour currentChapter
-watch(chapters, (newData) => {
-    if (newData && newData.length) {
-        const firstChapter = newData.find((chapter) => chapter.number === 1);
-        if (firstChapter) currentChapter.value = firstChapter;
-    }
-});
-
 // Afficher les choix
 watch(currentChapter, (chapter) => {
     if (chapter && chapter.number != 5) {
-        fetchChoices({ url: `chapters/${chapter.id}/choices` });
+        const localChoices = savedProgress.value?.choices?.[chapter.id];
+        if (localChoices) {
+            choices.value = localChoices;
+        } else {
+            fetchChoices({ url: `chapters/${chapter.id}/choices` });
+        }
     }
 });
+
+// Sauvegarder la progression
+watch(
+    [currentStory, currentChapter, chapters, choices],
+    ([story, chapter, chapters, choices]) => {
+        if (story && chapter && chapters?.length) {
+            const data = {
+                savedStory: story,
+                savedChapter: chapter,
+                savedStoryChapters: chapters,
+                savedChoices: choices,
+            };
+            setItem("story-in-progress", data);
+        }
+    }
+);
 </script>
 
 <template>
@@ -113,6 +164,12 @@ watch(currentChapter, (chapter) => {
             </ul>
             <p v-if="currentChapter.number === 5">Fin de l'histoire</p>
         </div>
+    </section>
+
+    <section v-if="showResumePrompt">
+        <h2>Souhaitez-vous reprendre votre lecture ?</h2>
+        <button @click="backToInProgress">Reprendre l'histoire</button>
+        <button @click="resetProgress">Recommencer une histoire</button>
     </section>
 </template>
 
