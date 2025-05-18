@@ -16,3 +16,7 @@ export function getItem(key, defaultValue = null) {
     }
     return data;
 }
+
+export function removeItem(key) {
+    localStorage.removeItem(key);
+}

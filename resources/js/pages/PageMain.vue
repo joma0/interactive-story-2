@@ -1,7 +1,11 @@
 <script setup>
+import { ref } from "vue";
+import { BookOpenIcon, XCircleIcon } from "@heroicons/vue/24/outline";
+
 import { useFetchJson } from "@/composables/useFetchJson";
 import { useStoryReader } from "../composables/useStoryReader";
 import { useRouter } from "../composables/useRouter";
+import { useSavedProgress } from "../composables/useSavedProgress";
 
 import StoriesList from "../components/StoriesList.vue";
 import CurrentStory from "../components/CurrentStory.vue";
@@ -15,6 +19,13 @@ const {
     error: storiesError,
     loading: storiesLoading,
 } = useFetchJson({ url: "stories" });
+
+// Vérifier si une progression est sauvegardée dans le local storage
+const hasSavedProgress = ref(false);
+const { resetProgress, getProgress } = useSavedProgress();
+if (getProgress()) {
+    hasSavedProgress.value = true;
+}
 
 // Lire une histoire
 // Lecture d’histoire
@@ -37,6 +48,19 @@ function onSelectStory(story) {
 
 function onSelectChoice(nextChapterId) {
     nextChapter(nextChapterId);
+}
+
+// Reprendre l'histoire
+function resumeStory() {
+    if (hasSavedProgress) {
+        window.location.hash = "#current-story";
+    }
+}
+
+// Fonction pour abandonner l'histoire
+function abandonStory() {
+    resetProgress();
+    hasSavedProgress.value = false;
 }
 </script>
 
@@ -65,6 +89,32 @@ function onSelectChoice(nextChapterId) {
                 >
                     Quel scénario t'inspire le plus ?
                 </h2>
+
+                <div
+                    v-if="hasSavedProgress"
+                    class="bg-gray-800 rounded-lg p-6 mb-8 border-l-4 border-blue-500 shadow-lg"
+                >
+                    <p class="text-lg mb-4 text-center">
+                        Vous avez quitté sans terminer votre histoire. Que
+                        souhaitez-vous faire ?
+                    </p>
+                    <div class="flex justify-center gap-4">
+                        <button
+                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md"
+                            @click="resumeStory"
+                        >
+                            <BookOpenIcon class="h-5 w-5 mr-2" />
+                            Reprendre l'histoire
+                        </button>
+                        <button
+                            class="inline-flex items-center px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors shadow-md"
+                            @click="abandonStory"
+                        >
+                            <XCircleIcon class="h-5 w-5 mr-2" />
+                            Abandonner l'histoire
+                        </button>
+                    </div>
+                </div>
 
                 <StoriesList
                     :stories="stories"

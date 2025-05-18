@@ -25,14 +25,15 @@ function selectChoice(nextChapterId) {
         >
             {{ currentStory.title }}
         </h2>
-        <p v-if="chaptersLoading || choicesLoading">Chargement du livre</p>
+        <p v-if="chaptersLoading || choicesLoading">Chargement...</p>
         <p v-if="chaptersError">Erreur : {{ chaptersError.statusText }}</p>
         <p v-if="choicesError">Erreur : {{ choicesError.statusText }}</p>
 
         <div
-            v-if="currentChapter && !choicesLoading && choices.length"
+            v-if="!chaptersLoading && !choicesLoading && choices.length"
             class="mt-8"
         >
+            <p v-if="!currentChapter">Ce chapitre n'existe pas</p>
             <h3
                 class="text-2xl font-serif text-center italic mb-24 text-gray-400"
             >
