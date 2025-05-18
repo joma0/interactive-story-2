@@ -5,6 +5,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
+
 
 // Homepage
 Route::get('/', function () {
@@ -34,3 +36,9 @@ Route::put('user', [UserController::class, 'update'])->middleware('auth')->name(
 
 // Supprimer le compte de l'utilisateur
 Route::delete('user', [UserController::class, 'destroy'])->middleware('auth')->name('user-delete');
+
+Route::get('check-auth', function () {
+    return response()->json([
+        'authenticated' => Auth::check()
+    ]);
+});
