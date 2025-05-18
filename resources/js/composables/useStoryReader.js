@@ -36,10 +36,10 @@ export function useStoryReader() {
 
     // Restaurer la progression
     if (getProgress()) {
-        const { savedStory, savedChapters, savedChapter, savedChoices } =
+        const { savedStory, savedStoryChapters, savedChapter, savedChoices } =
             getProgress();
         currentStory.value = savedStory;
-        chapters.value = savedChapters;
+        chapters.value = savedStoryChapters;
         currentChapter.value = savedChapter;
         choices.value = savedChoices;
     }
@@ -73,7 +73,6 @@ export function useStoryReader() {
         currentChapter.value = chapters.value.find(
             (chapter) => chapter.id === nextChapterId
         );
-        console.log(currentChapter);
     }
 
     // Afficher les choix

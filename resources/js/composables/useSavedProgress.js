@@ -1,5 +1,5 @@
 import { ref, watch } from "vue";
-import { getItem, setItem } from "@/utils/jsonStorage";
+import { getItem, setItem, removeItem } from "@/utils/jsonStorage";
 
 export function useSavedProgress() {
     const STORAGE_KEY = "story-in-progress";

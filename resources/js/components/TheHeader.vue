@@ -37,7 +37,9 @@ const goToHome = () => {
 </script>
 
 <template>
-    <header class="flex justify-between items-center p-4 bg-gray-800">
+    <header
+        class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-4 bg-gray-800 shadow-lg"
+    >
         <h1 class="text-xl font-bold text-white">Interactive Story</h1>
 
         <div class="flex gap-4">
@@ -68,6 +70,8 @@ const goToHome = () => {
             </button>
         </div>
     </header>
+    <!-- Spacer div pour compenser la hauteur du header fixe -->
+    <div class="h-16"></div>
 </template>
 
 <style scoped></style>
