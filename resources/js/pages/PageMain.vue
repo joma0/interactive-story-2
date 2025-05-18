@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, computed, nextTick } from "vue";
 import { useFetchJson } from "@/composables/useFetchJson";
-import { setItem, getItem } from "../utils/jsonStorage";
+import { useSavedProgress } from "../composables/useSavedProgress";
 
 //Router
 const hash = ref(window.location.hash || "#all-stories");
@@ -15,32 +15,6 @@ window.addEventListener("hashchange", router);
 
 // Appeler une première fois render directement au chargement de la page
 router();
-
-// Reprendre la progression
-const savedProgress = ref(getItem("story-in-progress"));
-const showResumePrompt = ref(!!savedProgress.value);
-
-function backToInProgress() {
-    if (!savedProgress.value) return;
-
-    const { savedStory, savedChapter, savedStoryChapters, savedChoices } =
-        savedProgress.value;
-
-    currentStory.value = savedStory;
-    currentChapter.value = savedChapter;
-    chapters.value = savedStoryChapters;
-    choices.value = savedChoices;
-
-    window.location.hash = "#current-story";
-    showResumePrompt.value = false;
-}
-
-function resetProgress() {
-    localStorage.removeItem("story-in-progress");
-    savedProgress.value = null;
-    window.location.hash = "#all-stories";
-    showResumePrompt.value = false;
-}
 
 // Histoire et chapitre en cours de lecture
 const currentStory = ref(null);
@@ -68,6 +42,18 @@ const {
     loading: choicesLoading,
     execute: fetchChoices,
 } = useFetchJson({ immediate: false });
+
+// Reprendre la progression
+const { saveProgress, resetProgress, getProgress } = useSavedProgress();
+
+if (getProgress()) {
+    const { savedStory, savedChapters, savedChapter, savedChoices } =
+        getProgress();
+    currentStory.value = savedStory;
+    chapters.value = savedChapters;
+    currentChapter.value = savedChapter;
+    choices.value = savedChoices;
+}
 
 // Sélectionner une histoire :
 function readStory(story) {
@@ -100,28 +86,15 @@ function nextChapter(nextChapterId) {
 // Afficher les choix
 watch(currentChapter, (chapter) => {
     if (chapter && chapter.number != 5) {
-        const localChoices = savedProgress.value?.choices?.[chapter.id];
-        if (localChoices) {
-            choices.value = localChoices;
-        } else {
-            fetchChoices({ url: `chapters/${chapter.id}/choices` });
-        }
+        fetchChoices({ url: `chapters/${chapter.id}/choices` });
     }
 });
 
 // Sauvegarder la progression
 watch(
-    [currentStory, currentChapter, chapters, choices],
-    ([story, chapter, chapters, choices]) => {
-        if (story && chapter && chapters?.length) {
-            const data = {
-                savedStory: story,
-                savedChapter: chapter,
-                savedStoryChapters: chapters,
-                savedChoices: choices,
-            };
-            setItem("story-in-progress", data);
-        }
+    [currentStory, chapters, currentChapter, choices],
+    ([story, chapters, chapter, choices]) => {
+        saveProgress(story, chapters, chapter, choices);
     }
 );
 </script>
@@ -166,12 +139,6 @@ watch(
             </ul>
             <p v-if="currentChapter.number === 5">Fin de l'histoire</p>
         </div>
-    </section>
-
-    <section v-if="showResumePrompt">
-        <h2>Souhaitez-vous reprendre votre lecture ?</h2>
-        <button @click="backToInProgress">Reprendre l'histoire</button>
-        <button @click="resetProgress">Recommencer une histoire</button>
     </section>
 </template>
 
