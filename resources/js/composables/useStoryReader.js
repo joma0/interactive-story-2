@@ -66,6 +66,10 @@ export function useStoryReader() {
     }
 
     function nextChapter(nextChapterId) {
+        if (!chapters.value) {
+            console.warn("Chapitres non chargés !");
+            return;
+        }
         currentChapter.value = chapters.value.find(
             (chapter) => chapter.id === nextChapterId
         );
