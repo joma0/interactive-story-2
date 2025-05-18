@@ -1,24 +1,11 @@
 <script setup>
 import { ref, watch, computed, nextTick } from "vue";
 import { useFetchJson } from "@/composables/useFetchJson";
-import { useSavedProgress } from "../composables/useSavedProgress";
+import { useStoryReader } from "../composables/useStoryReader";
+import { useRouter } from "../composables/useRouter";
 
 //Router
-const hash = ref(window.location.hash || "#all-stories");
-
-function router() {
-    hash.value = window.location.hash || "#all-stories";
-}
-
-// Ajouter un event listener au changement de hash dans l'url
-window.addEventListener("hashchange", router);
-
-// Appeler une première fois render directement au chargement de la page
-router();
-
-// Histoire et chapitre en cours de lecture
-const currentStory = ref(null);
-const currentChapter = ref(null);
+const { hash } = useRouter();
 
 // Charger les histoires
 const {
@@ -27,76 +14,20 @@ const {
     loading: storiesLoading,
 } = useFetchJson({ url: "stories" });
 
-// Charger les chapitres d'une histoire
+// Lire une histoire
+// Lecture d’histoire
 const {
-    data: chapters,
-    error: chaptersError,
-    loading: chaptersLoading,
-    execute: fetchChapters,
-} = useFetchJson({ immediate: false });
-
-// Charger les choix d'un chapitre
-const {
-    data: choices,
-    error: choicesError,
-    loading: choicesLoading,
-    execute: fetchChoices,
-} = useFetchJson({ immediate: false });
-
-// Reprendre la progression
-const { saveProgress, resetProgress, getProgress } = useSavedProgress();
-
-if (getProgress()) {
-    const { savedStory, savedChapters, savedChapter, savedChoices } =
-        getProgress();
-    currentStory.value = savedStory;
-    chapters.value = savedChapters;
-    currentChapter.value = savedChapter;
-    choices.value = savedChoices;
-}
-
-// Sélectionner une histoire :
-function readStory(story) {
-    currentStory.value = story;
-    window.location.hash = "#current-story";
-    fetchChapters({ url: `stories/${story.id}/chapters` });
-
-    // Attribuer le premier chapitre à currentChapter
-    watch(
-        chapters,
-        (newData) => {
-            if (newData && newData.length) {
-                const firstChapter = newData.find(
-                    (chapter) => chapter.number === 1
-                );
-                if (firstChapter) currentChapter.value = firstChapter;
-            }
-        },
-        { once: true }
-    );
-}
-
-function nextChapter(nextChapterId) {
-    currentChapter.value = chapters.value.find(
-        (chapter) => chapter.id === nextChapterId
-    );
-    console.log(currentChapter);
-}
-
-// Afficher les choix
-watch(currentChapter, (chapter) => {
-    if (chapter && chapter.number != 5) {
-        fetchChoices({ url: `chapters/${chapter.id}/choices` });
-    }
-});
-
-// Sauvegarder la progression
-watch(
-    [currentStory, chapters, currentChapter, choices],
-    ([story, chapters, chapter, choices]) => {
-        saveProgress(story, chapters, chapter, choices);
-    }
-);
+    currentStory,
+    currentChapter,
+    chapters,
+    chaptersError,
+    chaptersLoading,
+    choices,
+    choicesError,
+    choicesLoading,
+    readStory,
+    nextChapter,
+} = useStoryReader();
 </script>
 
 <template>
